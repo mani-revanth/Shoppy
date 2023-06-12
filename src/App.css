@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif&display=swap');
+@import url(https://fonts.googleapis.com/css?family=Rye);
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=PT+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Monomaniac+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather&display=swap');
+
+
+
+*{
+  margin:0;
+  padding:0;
+  font-family: 'Acme', sans-serif;
+}
+p-button-link{
+  text-decoration: none;
+}
+body{
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+.container::-webkit-scrollbar {
+  display: none;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+li { 
+  display: table-cell; 
+  position: relative; 
+  padding: 15px 0;
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+a.underline {
+  color: #9F73AB;
+  text-decoration: none;
+  
+  display: inline-block;
+  padding: 15px 20px;
+  position: relative;
+}
+a.underline:after {    
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  background: #9F73AB;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+a.underline:hover:after { 
+  width: 100%; 
+  left: 0; 
+}
+@media screen and (max-height: 300px) {
+	ul {
+		margin-top: 40px;
+	}
+}
+.tootlips:hover{
+  color:#FB2576;
+  cursor: pointer;
+}
+
+.product_card{
+  -webkit-transition: -webkit-transform 0.5s ease;
+-moz-transition: -moz-transform 0.5s ease;
+transition: transform 0.5s ease;
+}
+
+/*.product_card:hover{
+  cursor: pointer;
+  -webkit-transform: scale(1.25);
+-moz-transform: scale(1.25);
+-o-transform: scale(1.25);
+transform: scale(1.25);
+
+
+}*/
+
+.productList{
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: nowrap;
+  list-style: none;
+  margin: 1rem 0;
+  overflow-x: scroll;
+  padding: 0 0 0 1rem;
+  scroll-padding-left: 1rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.productListitem{
+  padding: 0 1rem 0 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+
+.ribbon {
+  height: 188px;
+  font-family: Rey;
+  position: relative;
+  margin-bottom: 30px;
+  background: url(https://html5book.ru/wp-content/uploads/2015/10/snow-road.jpg);
+  background-size: cover;
+  text-transform: uppercase;
+  color: white;
+}
+
+
+.ribbon5 {
+  display: block;
+  font-family: Rey;
+  font-size: 200%;
+  width: calc(100% + 20px);
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  margin-left: -10px;
+  margin-right: -10px;
+  background: #46458C;
+  position: relative;
+  top: 20px;
+}
+.ribbon5:before, .ribbon5:after {
+  content: "";
+  position: absolute;
+}
+.ribbon5:before {
+  height: 0;
+  width: 0;
+  bottom: -10px;
+  left: 0;
+  border-top: 10px solid #150050;
+  border-left: 10px solid transparent;
+}
+.ribbon5:after {
+  height: 0;
+  width: 0;
+  right: 0;
+  bottom: -10px;
+  border-top: 10px solid #150050;
+  border-right: 10px solid transparent;
+}
+
+.text1{
+  font-weight: 100 !important;
+}
