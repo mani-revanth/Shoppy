@@ -15,7 +15,7 @@ import { Switch, TextField } from "@mui/material";
 import Tooltip from '@mui/material/Tooltip';
 //import {Link} from 'react-router-dom';
 import { UseUserAuth } from './context/UserAuthContext';
-import { Navigate, Router } from 'react-router-dom';
+import { Navigate, Router, useLocation } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import Carousel from 'react-bootstrap/Carousel';
 import axios from 'axios';
@@ -215,7 +215,7 @@ const add_new_card_women=(link,name)=>{
 
 
 
-export function Women_products()
+export default function Women_products()
 {
     let {user}=UseUserAuth();
     const [link,setLink]=useState("");
@@ -238,7 +238,7 @@ export function Women_products()
                 {
                   women_cards_array.map((card,i)=>{
                     return(
-                      <div key={i} className="product_card" onClick={()=>{navigate_to(`/women/${card._id+card.card_name}`)}} style={{color:'gainsboro',height:'15rem',margin:'1%',border:'3px solid black',backgroundImage:`url(${card.card_image_src})`,backgroundSize:'cover',width:'20rem',justifyContent:'center',textAlign:'center',alignItems:'center',flex:1,paddingTop:'45%'}}>
+                      <div key={i} className="product_card" onClick={()=>{navigate_to(`/women/${card._id}`,{state:{products:card.products_array}})}} style={{color:'gainsboro',height:'15rem',margin:'1%',border:'3px solid black',backgroundImage:`url(${card.card_image_src})`,backgroundSize:'cover',width:'20rem',justifyContent:'center',textAlign:'center',alignItems:'center',flex:1,paddingTop:'45%'}}>
                       <div className="ribbon">
                         <span className="ribbon5">{card.card_name}</span>
                       </div>
@@ -584,17 +584,20 @@ const GridItem = (props) => {
 };
 
 
-function ProductDisplay(props){
-  const [products, setProducts] = useState([]);
+export function ProductDisplayWomen(props){
+
+  const location=useLocation();
+
+  const [products, setProducts] = useState(location.state.products);
   const [layout, setLayout] = useState('grid');
   let {user}=UseUserAuth();
 
-  useEffect(()=>{
+  useEffect(()=>{/*
     //console.log(user);
       axios.post("http://localhost:5000/get_sub_cards_women",{id:props.id}).then((res)=>{
           setProducts(res.data);
       });
-  },[]);
+    */},[]);
 
   const getSeverity = (product) => {
       return 'success';
@@ -705,7 +708,7 @@ function ProductDisplay(props){
   )
 }*/}
 
-export default function Routes_women_products(){
+/*export default function Routes_women_products(){
   const [temp_array,set_temp_array]=useState([]);
   useEffect(()=>{
     axios.post("http://localhost:5000/get_women_cards",{}).then((res)=>{
@@ -724,4 +727,4 @@ export default function Routes_women_products(){
       }
     </Routes>
   )
-}
+}*/

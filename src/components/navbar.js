@@ -97,7 +97,7 @@ const MyNavBar=()=>{
     <Navbar collapseOnSelect expand="lg" style={{height:'10vh',backgroundColor:'#FA9884',fontSize:'1.5rem',borderBottom:'1px solid black',width:'100%',paddingRight:'0'}}>
       <Container fluid style={{margin:0,width:'100%',marginRight:0}}>
       <Navbar.Brand style={{height:'80%',textDecoration:'none'}}>
-        <img src="./shoppyLogo.svg" style={{height:'9vh',}}/>
+        <img src="https://firebasestorage.googleapis.com/v0/b/shopify-authentication-15fd1.appspot.com/o/shoppy-low-resolution-logo-white-on-transparent-background.svg?alt=media&token=a7c466ad-21ed-48cd-a453-807275408dda&_gl=1*eyir74*_ga*MTkyNTUwNTU2NS4xNjg1MTc2MTAx*_ga_CW55HF8NVT*MTY4NjU3MjA2Ny45LjEuMTY4NjU3MjE4MS4wLjAuMA.." style={{height:'9vh',}}/>
       </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse style={{backgroundColor:'#FA9884',width:'100%'}} id="responsive-navbar-nav"> 

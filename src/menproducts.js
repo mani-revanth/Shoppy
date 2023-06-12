@@ -15,7 +15,7 @@ import { Switch, TextField } from "@mui/material";
 import Tooltip from '@mui/material/Tooltip';
 //import {Link} from 'react-router-dom';
 import { UseUserAuth } from './context/UserAuthContext';
-import { Navigate, Router } from 'react-router-dom';
+import { Navigate, Router, useLocation } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import Carousel from 'react-bootstrap/Carousel';
 import axios from 'axios';
@@ -222,7 +222,7 @@ const add_new_card_men=(link,name)=>{
 
 
 
-export function Men_products()
+export default function Men_products()
 {
     let {user}=UseUserAuth();
     const [link,setLink]=useState("");
@@ -245,7 +245,7 @@ export function Men_products()
                 {
                   men_cards_array.map((card,i)=>{
                     return(
-                      <div key={i} className="product_card" onClick={()=>{navigate_to(`/men/${card._id+card.card_name}`)}} style={{color:'gainsboro',height:'15rem',margin:'1%',border:'3px solid black',backgroundImage:`url(${card.card_image_src})`,backgroundSize:'cover',width:'20rem',justifyContent:'center',textAlign:'center',alignItems:'center',flex:1,paddingTop:'45%'}}>
+                      <div key={i} className="product_card" onClick={()=>{navigate_to(`/men/${card._id}`,{state:{products:card.products_array}})}} style={{color:'gainsboro',height:'15rem',margin:'1%',border:'3px solid black',backgroundImage:`url(${card.card_image_src})`,backgroundSize:'cover',width:'20rem',justifyContent:'center',textAlign:'center',alignItems:'center',flex:1,paddingTop:'45%'}}>
                       <div className="ribbon">
                         <span className="ribbon5">{card.card_name}</span>
                       </div>
@@ -490,6 +490,9 @@ const GridItem = (props) => {
   return (
       <div className="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
           <div className="p-4 border-1 surface-border surface-card border-round" style={{width:'100%',height:'100%'}}>
+              
+              
+              
               {toggle?
               <div className="product_card" style={{height:'100%',width:'100%',backgroundColor:'white',justifyContent:'space-evenly',textAlign:'center',padding:'5%'}}>
               <TextField type="text" style={{width:'100%'}} value={title} label="name" onChange={(e)=>setTitle(e.target.value)}></TextField>
@@ -511,6 +514,8 @@ const GridItem = (props) => {
               renderInput={(params) => <TextField {...params} label="warning" />}
               />
               <div style={{display:'flex',justifyContent:'space-evenly',marginTop:'5%'}}>
+              
+              
               <Button1 style={{backgroundColor:'gold',width:'100%'}} onClick={()=>{
               let x={
               card_title:card.card_title,
@@ -531,6 +536,8 @@ const GridItem = (props) => {
               }}>{`${card.is_best_seller ? "remove from best seller" :"add to best seller"}`}</Button1></div>
               <br/>
               <div style={{display:'flex',justifyContent:'center'}}>
+              
+              
               <Button1 style={{width:'100%',backgroundColor:'blue'}} onClick={()=>{
               let x={
               card_title:title,
@@ -546,6 +553,9 @@ const GridItem = (props) => {
               update_best_sellermen(card._id,x);
               }}>update</Button1>
               </div>
+              
+              
+              
               <div style={{display:'flex',justifyContent:'space-evenly',marginTop:'5%'}}>
               <Button1 style={{width:'45%',backgroundColor:'red'}} onClick={(e)=>{
               e.preventDefault();
@@ -553,10 +563,15 @@ const GridItem = (props) => {
               if(card.is_best_seller)
               remove_best_seller_man(card._id);
               }}>delete card</Button1>
+              
+              
+              
               <Button1 style={{width:'45%',backgroundColor:'green'}} onClick={()=>setToggle(false)}>back</Button1>
               </div>
               </div>:
               <div>
+              
+              
               <div className="flex flex-wrap align-items-center justify-content-between gap-2">
                   <div className="flex align-items-center gap-2">
                       <i className="pi pi-tag"></i>
@@ -564,10 +579,14 @@ const GridItem = (props) => {
                   </div>
                   <Tag value={product.warning} severity={getSeverity(product)}></Tag>
               </div>
+              
+              
               <div className="flex flex-column align-items-center gap-3 py-5">
                   <img className="w-9 shadow-2 border-round" src={product.card_image_src} alt={product.name} style={{height:'150%',width:'100%'}}/>
                   <h1 className="text-2xl font-bold">{product.card_title}</h1>
                   <h3>{product.card_description}</h3>
+              
+              
               </div>
               <div className="flex align-items-center justify-content-between">
                   <span className="text-2xl font-semibold">Rs.{product.card_cost}</span>
@@ -590,17 +609,22 @@ const GridItem = (props) => {
 };
 
 
-function ProductDisplay(props){
-  const [products, setProducts] = useState([]);
+export function ProductDisplay(props){
+
+  const location=useLocation();
+  
+
+
+  const [products, setProducts] = useState(location.state.products);
   const [layout, setLayout] = useState('grid');
   let {user}=UseUserAuth();
 
-  useEffect(()=>{
+  useEffect(()=>{/*
     //console.log(user);
       axios.post("http://localhost:5000/get_sub_cards_men",{id:props.id}).then((res)=>{
           setProducts(res.data);
       });
-  },[]);
+    */},[]);
 
   const getSeverity = (product) => {
       return 'success';
@@ -618,7 +642,7 @@ function ProductDisplay(props){
 
   return (
       <div style={{width:'100hw',height:'100vh'}}>
-      <CollapsibleExample/>
+      <MyNavBar/>
       <div style={{overflowY:'scroll',width:'100hw',height:'90vh'}}>
       <div className="card">
           {/*<DataView value={products} layout={layout} itemTemplate={itemTemplate}/>*/}
@@ -711,7 +735,7 @@ function ProductDisplay(props){
   )
 }*/}
 
-export default function Routes_men_products(){
+{/*export default function Routes_men_products(){
   const [temp_array,set_temp_array]=useState([]);
   useEffect(()=>{
     axios.post("http://localhost:5000/get_men_cards",{}).then((res)=>{
@@ -730,4 +754,4 @@ export default function Routes_men_products(){
       }
     </Routes>
   )
-}
+}*/}
