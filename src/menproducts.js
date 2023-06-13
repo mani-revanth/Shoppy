@@ -15,7 +15,7 @@ import { Switch, TextField } from "@mui/material";
 import Tooltip from '@mui/material/Tooltip';
 //import {Link} from 'react-router-dom';
 import { UseUserAuth } from './context/UserAuthContext';
-import { Navigate, Router, useLocation } from 'react-router-dom';
+import { Navigate, Router, useLocation, useParams } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import Carousel from 'react-bootstrap/Carousel';
 import axios from 'axios';
@@ -463,6 +463,9 @@ const update_card_from_array=(id1,id2,x,i)=>{
 
 const GridItem = (props) => {
   const product=props.product;
+  const id1=props.id;
+  const id2=props.product._id;
+  const navigate=useNavigate();
   const [toggle,setToggle]=useState(false);
   const card=props.product;
   const user=props.user;
@@ -487,14 +490,24 @@ const GridItem = (props) => {
             return null;
     }
 };
+
+useEffect(()=>{
+  axios.post("http://localhost:5000/add_new_product",{...product,id1:id1,gender:0,images:[],themes:[],categories:[],comments:[]}).then((res)=>{
+    if(res.data=="yes")
+    console.log("yes");
+  })
+},[]);
+
   return (
-      <div className="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
+      <div className="col-12 sm:col-6 lg:col-12 xl:col-4 p-2" onClick={()=>{
+        navigate(`/men/${id1}/${id2}`);
+      }}>
           <div className="p-4 border-1 surface-border surface-card border-round" style={{width:'100%',height:'100%'}}>
               
               
               
               {toggle?
-              <div className="product_card" style={{height:'100%',width:'100%',backgroundColor:'white',justifyContent:'space-evenly',textAlign:'center',padding:'5%'}}>
+              <div className="product_card" style={{height:'100%',width:'100%',backgroundColor:'white',justifyContent:'space-evenly',textAlign:'center',padding:'5%'}} onClick={(e)=>{e.stopPropagation();}}>
               <TextField type="text" style={{width:'100%'}} value={title} label="name" onChange={(e)=>setTitle(e.target.value)}></TextField>
               <br/><br/>
               <TextField type="text" style={{width:'100%'}} value={des} label="description" onChange={(e)=>setDes(e.target.value)}></TextField>
@@ -569,9 +582,14 @@ const GridItem = (props) => {
               <Button1 style={{width:'45%',backgroundColor:'green'}} onClick={()=>setToggle(false)}>back</Button1>
               </div>
               </div>:
+              
+
+
+
+
+
+              
               <div>
-              
-              
               <div className="flex flex-wrap align-items-center justify-content-between gap-2">
                   <div className="flex align-items-center gap-2">
                       <i className="pi pi-tag"></i>
@@ -590,7 +608,12 @@ const GridItem = (props) => {
               </div>
               <div className="flex align-items-center justify-content-between">
                   <span className="text-2xl font-semibold">Rs.{product.card_cost}</span>
-                  {user=='ch.m.s.revanth@gmail.com'?<Button1 icon="pi pi-pencil" className='p-button-rounded' style={{backgroundColor:'#AACB73'}} onClick={()=>{setToggle(true)}}></Button1>:
+
+
+                  {user=='ch.m.s.revanth@gmail.com'?<Button1 icon="pi pi-pencil" className='p-button-rounded' style={{backgroundColor:'#AACB73'}} onClick={(e)=>{e.stopPropagation(); setToggle(true)}}></Button1>
+                  
+                  :
+                  
                   <Button1 icon="pi pi-shopping-cart" className="p-button-rounded" disabled={product.warning === 'OUT OF STOCK'}
                   onClick={(e)=>{
                   e.preventDefault();
@@ -609,9 +632,24 @@ const GridItem = (props) => {
 };
 
 
+
+export function MenProductDetails()
+{
+  const {id1,id2}=useParams();
+  return(
+    <>
+      <h1>{id1}</h1>
+      <h1>{id2}</h1>
+    </>
+  )
+}
+
+
+
 export function ProductDisplay(props){
 
   const location=useLocation();
+  const {id}=useParams();
   
 
 
@@ -636,7 +674,7 @@ export function ProductDisplay(props){
           return;
       }
 
-      return <GridItem product={product} user={user.email} id={props.id}/>
+      return <GridItem product={product} user={user.email} />
   };
 
 
@@ -662,7 +700,7 @@ export function ProductDisplay(props){
         }}
       >
         {products.map((product,i)=>{
-              return <GridItem key={i} product={product} user={user.email} id={props.id} index={i}/>
+              return <GridItem key={i} product={product} user={user.email} id={id} index={i}/>
             })}
       </Grid>
     </Box>

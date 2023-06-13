@@ -36,6 +36,7 @@ import { UseUserAuth } from './context/UserAuthContext';
 //import Routes_men_products from "./menproducts";
 import Men_products from './menproducts';
 import { ProductDisplay } from './menproducts';
+import { MenProductDetails } from './menproducts';
 //import Routes_women_products from './womenproducts';
 import Women_products from './womenproducts.js';
 import { ProductDisplayWomen } from './womenproducts.js';
@@ -62,6 +63,7 @@ function App() {
             <Route path="/billing" element={<Billing_protected_route><Billing_screen/></Billing_protected_route>}/>
             <Route exact path="/men" element={<Men_products/>}/>
             <Route exact path="/men/:id" element={<ProductDisplay/>}/>
+            <Route exact path="/men/:id1/:id2" element={<MenProductDetails/>} />
             <Route exact path="/women" element={<Women_products/>}/>
             <Route exact path="/women/:id" element={<ProductDisplayWomen/>} />
       </Routes>

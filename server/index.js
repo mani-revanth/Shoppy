@@ -120,6 +120,26 @@ const search_product=new mongoose.Schema({
 })
 
 
+const product_details=new mongoose.Schema({
+    card_title:String,
+    card_description:String,
+    card_image_src:String,
+    card_cost:Number,
+    warning:String,
+    offer:Number,
+    is_best_seller:Number,
+    id1:String,
+    gender:Number,
+    images:[String],
+    themes:[String],
+    categories:[String],
+    comments:[{name:String,
+        text:String,
+        rating:Number,
+    }],
+
+})
+
 
 const best_sellers_for_men_model=new mongoose.model("best_sellers_for_men_model",best_sellers_for_men);
 const best_sellers_for_women_model=new mongoose.model("best_sellers_for_women_model",best_sellers_for_women);
@@ -128,12 +148,13 @@ const cards_for_women_model=new mongoose.model("cards_for_women_model",cards_for
 const cards_for_brands_model=new mongoose.model("cards_for_brands_model",cards_for_brands);
 const current_cart_model=new mongoose.model("current_cart_model",current_cart);
 const user_bill_model=new mongoose.model("user_bill_model",user_bill);
-const search_product_model=new mongoose.model("search_product_model",search_product);
+//const search_product_model=new mongoose.model("search_product_model",search_product);
+const product_details_model=new mongoose.model("product_details_model",product_details);
 
 
 
 /////////////////////////////////////////////////////////SEARCH HANDLING FUNCTIONS////////////////////////////////////////////////////////////////
-
+/*
 
 app.post("/add_to_search",(req,res)=>{
     const x=new search_product_model(req.body);
@@ -150,11 +171,11 @@ app.get("/get_search_products",(req,res)=>{
 })
 
 
-
+*/
 
 //////////////////////////////////////////////////////////SEARCH HANDLING FUNCTIONS///////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////CART HANDLING FUNCTIONS////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////CART HANDLING FUNCTIONS////////////////////////////////////////////////////////////////////
 
 app.post("/add_new_cart",(req,res)=>{
     current_cart_model.find({user_name:(req.body).name},(err,abc)=>{
@@ -270,7 +291,25 @@ app.post("/get_length_of_cart",(req,res)=>{
 
 
 ////////////////////////////////////////////////////////CART HANDLING FUNCTIONS////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////MEN PRODUCT HANDLING//////////////////////////////////////////////////////////////////
+
+
+
+app.post("/add_new_product",async (req,res)=>{
+    const abc=await product_details_model.findOne({_id:(req.body)._id});
+    if(abc==null)
+    {
+        //console.log(req.body);
+        const product=new product_details_model(req.body);
+        product.save();
+    }
+    res.send("yes");
+})
+
+
+
+
+///////////////////////////////////////////////////////MEN PRODUCT HANDLING////////////////////////////////////////////////////////////////////
+
 
 app.post("/update_men_product",async (req,res)=>{
     const abc=await cards_for_men_model.findOne({_id:(req.body).id1});
