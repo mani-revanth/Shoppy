@@ -42,6 +42,11 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { Link } from 'react-router-dom';
 import {Autocomplete} from '@mui/material';
 import MyNavBar from './components/navbar';
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+import "./slider.css";
+//import {Card} from '@mui/material';
 //import TextField from '@mui/material';
 //import {useNavigate} from 'react-router-dom';
 
@@ -465,8 +470,19 @@ const GridItem = (props) => {
   const product=props.product;
   const id1=props.id;
   const id2=props.product._id;
+  
   const navigate=useNavigate();
   const [toggle,setToggle]=useState(false);
+  const [toggle1,setToggle1]=useState(false);
+
+  const [images,setImages]=useState([]);
+  const [themes,setThemes]=useState([]);
+  const [categories,setCategories]=useState([]);
+
+  const [image,setImage]=useState("");
+  const [theme,setTheme]=useState("");
+  const [categorie,setCategorie]=useState("");
+
   const card=props.product;
   const user=props.user;
   const [title,setTitle]=useState(card.card_title);
@@ -491,10 +507,28 @@ const GridItem = (props) => {
     }
 };
 
+
+const settings = {
+  customPaging: function(i) {
+    return (
+      <a>
+        <div style={{backgroundColor:`${themes[i]}`,height:'3vh',width:'3vh',borderRadius:'50%',border:'1px solid black'}} />
+      </a>
+    );
+  },
+  dots: true,
+  dotsClass: "slick-dots slick-thumb",
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+};
+
+
 useEffect(()=>{
-  axios.post("http://localhost:5000/add_new_product",{...product,id1:id1,gender:0,images:[],themes:[],categories:[],comments:[]}).then((res)=>{
-    if(res.data=="yes")
-    console.log("yes");
+  axios.post("http://localhost:5000/get_product",{_id:id2}).then((res)=>{
+    setImages(res.data.images);
+    setThemes(res.data.themes);
   })
 },[]);
 
@@ -502,12 +536,101 @@ useEffect(()=>{
       <div className="col-12 sm:col-6 lg:col-12 xl:col-4 p-2" onClick={()=>{
         navigate(`/men/${id1}/${id2}`);
       }}>
-          <div className="p-4 border-1 surface-border surface-card border-round" style={{width:'100%',height:'100%'}}>
+          <div className="p-4 border-1 surface-border surface-card border-round" style={{width:'100%',height:'100%',overflow:'scroll'}}>
               
               
               
               {toggle?
+
               <div className="product_card" style={{height:'100%',width:'100%',backgroundColor:'white',justifyContent:'space-evenly',textAlign:'center',padding:'5%'}} onClick={(e)=>{e.stopPropagation();}}>
+              {toggle1 ? 
+
+
+
+              <>
+
+              <div style={{height:'30vh',marginBottom:'3vh',width:'100%'}}>
+              <Slider {...settings}>
+              {
+                images.map((image,i)=>{
+                  return(
+                  <div key={image+i} style={{backgroundColor:`${themes[i]}`}}>
+                    <img src={image} style={{height:'100%',width:'auto',position:'absolute',left:'50%',transform:'translate(-50%)'}}/>
+                    <Button1 onClick={()=>{
+                      let abc=[...images];
+                      abc.splice(i,1);
+                      let bcd=[...themes];
+                      bcd.splice(i,1);
+                      console.log(abc);
+                      console.log(bcd);
+                      setImages(abc);
+                      setThemes(bcd);
+                    }}>delete</Button1>
+                  </div>
+                  )
+                })
+              }
+              </Slider>
+              </div>
+
+              <div style={{backgroundColor:'white',height:'fit-content',padding:'2%',border:'1px solid black',marginBottom:'3%'}}>
+                <TextField style={{width:'100%',marginBottom:'2%'}} label="image" value={image} onChange={(e)=>{setImage(e.target.value);}}/>
+                <TextField style={{width:'100%',marginBottom:'2%'}} label="theme" value={theme} onChange={(e)=>{setTheme(e.target.value);}}/>
+                <Button1 onClick={()=>{
+                  if(image.trim()=="" || theme.trim()=="")
+                  {
+                    alert("fill all the fields completely");
+                  }
+                  else
+                  {
+                    let abc=images;
+                    abc.push(image);
+                    let bcd=themes;
+                    bcd.push(theme);
+                    setImages(abc);
+                    setThemes(bcd);
+                    console.log(images);
+                    console.log(themes);
+                    setImage("");
+                    setTheme("");
+                  }
+                  }}
+                  >add</Button1>
+              </div>
+
+              {
+                categories.map((categorie,i)=>{
+                  <div style={{width:'100%',height:'10%',display:'flex',justifyContent:'space-evenly',border:'1px solid grey',marginBottom:'1%'}}>
+                    <h1>{categorie}</h1>
+                    <Button1 style={{backgroundColor:'#F45050'}} onClick={()=>{
+                      setCategories([...categories.slice(0,i),...categories.slice(i)]);
+                    }}>
+                    delete
+                    </Button1>
+                  </div>
+                })
+              }
+
+              <div style={{backgroundColor:'white',height:'fit-content',padding:'2%',border:'1px solid black'}}>
+                <TextField style={{width:'100%',marginBottom:'2%'}} label="categorie" value={categorie} onChange={(e)=>{setCategorie(e.target.value);}}/>
+                
+                <Button1 onClick={()=>{
+                  if(categorie.trim()!="")
+                  {
+                    setCategories([...categories,categorie]);
+                  }
+                  else
+                  alert("fill all the fields");
+                  }}
+                  >add categorie</Button1>
+              </div>
+
+              </>
+              
+              :
+
+
+              <>
               <TextField type="text" style={{width:'100%'}} value={title} label="name" onChange={(e)=>setTitle(e.target.value)}></TextField>
               <br/><br/>
               <TextField type="text" style={{width:'100%'}} value={des} label="description" onChange={(e)=>setDes(e.target.value)}></TextField>
@@ -570,18 +693,30 @@ useEffect(()=>{
               
               
               <div style={{display:'flex',justifyContent:'space-evenly',marginTop:'5%'}}>
-              <Button1 style={{width:'45%',backgroundColor:'red'}} onClick={(e)=>{
+              <Button1 style={{width:'30%',backgroundColor:'red'}} onClick={(e)=>{
               e.preventDefault();
               delete_card_from_array(props.id,card._id);
               if(card.is_best_seller)
               remove_best_seller_man(card._id);
-              }}>delete card</Button1>
+              }}>delete</Button1>
               
               
               
-              <Button1 style={{width:'45%',backgroundColor:'green'}} onClick={()=>setToggle(false)}>back</Button1>
+              <Button1 style={{width:'30%',backgroundColor:'green'}} onClick={()=>setToggle(false)}>back</Button1>
+
+
+
+              <Button1 style={{width:'30%',backgroundColor:'#F5F5F5',color:'black'}} onClick={()=>setToggle1(true)}>more...</Button1>
               </div>
-              </div>:
+              </>
+              }
+
+              </div>
+              
+              
+              
+              
+              :
               
 
 
@@ -655,14 +790,16 @@ export function ProductDisplay(props){
 
   const [products, setProducts] = useState(location.state.products);
   const [layout, setLayout] = useState('grid');
-  let {user}=UseUserAuth();
+  let user=localStorage.getItem("currentUserMail");
 
-  useEffect(()=>{/*
+  useEffect(()=>{
     //console.log(user);
+    if(products==null)
+    {
       axios.post("http://localhost:5000/get_sub_cards_men",{id:props.id}).then((res)=>{
           setProducts(res.data);
       });
-    */},[]);
+    }},[]);
 
   const getSeverity = (product) => {
       return 'success';
@@ -700,8 +837,9 @@ export function ProductDisplay(props){
         }}
       >
         {products.map((product,i)=>{
-              return <GridItem key={i} product={product} user={user.email} id={id} index={i}/>
-            })}
+              return <GridItem key={i} product={product} user={user} id={id} index={i}/>
+            })
+        }
       </Grid>
     </Box>
           {/*

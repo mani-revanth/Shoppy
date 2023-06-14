@@ -295,16 +295,29 @@ app.post("/get_length_of_cart",(req,res)=>{
 
 
 app.post("/add_new_product",async (req,res)=>{
-    const abc=await product_details_model.findOne({_id:(req.body)._id});
+    const abc =await product_details_model.findOne({_id:(req.body)._id});
     if(abc==null)
     {
-        //console.log(req.body);
         const product=new product_details_model(req.body);
         product.save();
     }
     res.send("yes");
 })
 
+
+
+app.post("/get_product",async(req,res)=>{
+    const abc =await product_details_model.findOne({_id:(req.body)._id});
+    res.send(abc);
+})
+
+
+app.post("/update_product",async (req,res)=>{
+    const abc=await product_details_model.findOne({_id:(req.body)._id});
+    abc=(req.body);
+    abc.save();
+    res.send("yes");
+})
 
 
 
@@ -324,6 +337,9 @@ app.post("/update_men_product",async (req,res)=>{
         is_best_seller:(req.body).is_best_seller,
     }
     abc.products_array[(req.body).i]=x;
+    const product=await product_details_model.findOne({_id:(req.body).id2});
+    product.set(x);
+    product.save();
     //await current_cart_model.updateMany({'cart_items._id':(req.body).id2},{$set :{'cart_items.$':x}});
     abc.save();
     res.send("yes");
@@ -354,6 +370,7 @@ app.post("/remove_card_from_array",async (req,res)=>{
     await cards_for_men_model.updateOne({_id:(req.body).main_id},{$pull :{products_array :{_id:(req.body).temp_id}}});
     res.send("yes");
 })
+
 
 app.post("/get_sub_cards_men",(req,res)=>{
     cards_for_men_model.findOne({_id:(req.body).id},(err,abc)=>{

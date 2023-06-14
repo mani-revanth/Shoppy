@@ -1,0 +1,13 @@
+
+
+.slick-slide > div {
+  height: 30vh !important;
+  position: relative;
+  min-width:100% !important;
+  display: flex;
+  background-color: orange;
+  align-items: flex-end;
+  flex-direction: column;
+}
+
+
