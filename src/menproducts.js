@@ -46,6 +46,9 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import "./slider.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+
 //import {Card} from '@mui/material';
 //import TextField from '@mui/material';
 //import {useNavigate} from 'react-router-dom';
@@ -478,6 +481,8 @@ const GridItem = (props) => {
   const [images,setImages]=useState([]);
   const [themes,setThemes]=useState([]);
   const [categories,setCategories]=useState([]);
+  const [addingToggle1,setAddingToggle1]=useState(false);
+  const [addingToggle2,setAddingToggle2]=useState(false);
 
   const [image,setImage]=useState("");
   const [theme,setTheme]=useState("");
@@ -550,30 +555,11 @@ useEffect(()=>{
               <>
 
               <div style={{height:'30vh',marginBottom:'3vh',width:'100%'}}>
-              <Slider {...settings}>
               {
-                images.map((image,i)=>{
-                  return(
-                  <div key={image+i} style={{backgroundColor:`${themes[i]}`}}>
-                    <img src={image} style={{height:'100%',width:'auto',position:'absolute',left:'50%',transform:'translate(-50%)'}}/>
-                    <Button1 onClick={()=>{
-                      let abc=[...images];
-                      abc.splice(i,1);
-                      let bcd=[...themes];
-                      bcd.splice(i,1);
-                      console.log(abc);
-                      console.log(bcd);
-                      setImages(abc);
-                      setThemes(bcd);
-                    }}>delete</Button1>
-                  </div>
-                  )
-                })
-              }
-              </Slider>
-              </div>
+                (images.length==0 || addingToggle1) ?
 
-              <div style={{backgroundColor:'white',height:'fit-content',padding:'2%',border:'1px solid black',marginBottom:'3%'}}>
+
+                <div style={{backgroundColor:'white',height:'fit-content',padding:'2%',border:'1px solid black',marginBottom:'3%'}}>
                 <TextField style={{width:'100%',marginBottom:'2%'}} label="image" value={image} onChange={(e)=>{setImage(e.target.value);}}/>
                 <TextField style={{width:'100%',marginBottom:'2%'}} label="theme" value={theme} onChange={(e)=>{setTheme(e.target.value);}}/>
                 <Button1 onClick={()=>{
@@ -598,6 +584,44 @@ useEffect(()=>{
                   >add</Button1>
               </div>
 
+              :
+
+              <Slider {...settings} 
+              nextArrow={<FontAwesomeIcon icon={faChevronRight}/>}
+              prevArrow={<FontAwesomeIcon icon={faChevronLeft}/>}
+              >
+              {
+                images.map((image,i)=>{
+                  return(
+                  <div key={image+i}>
+                    <div style={{backgroundColor:`${themes[i]}`,width:'100%',position:'absolute',height:'100%',top:0,display:'flex',justifyContent:'flex-end',borderRadius:'5px'}}>
+                    <img src={image} style={{height:'100%',position:'absolute',width:'auto',transform:'translate(-50%)',left:'50%'}}/>
+                    <Button1 style={{height:'fit-content',backgroundColor:'#F15A59',border:'1px solid white'}} onClick={()=>{
+                      let abc=[...images];
+                      abc.splice(i,1);
+                      let bcd=[...themes];
+                      bcd.splice(i,1);
+                      console.log(abc);
+                      console.log(bcd);
+                      setImages(abc);
+                      setThemes(bcd);
+                    }}>delete</Button1>
+                    </div>
+                  </div>
+                  )
+                })
+              }
+              </Slider>
+              }
+              </div>
+
+              {
+                images.length ?
+                <Button1 onClick={()=>{setAddingToggle1(!addingToggle1)}}>{addingToggle1 ? "back" : "add"}</Button1> :
+                null
+              }
+
+              
               {
                 categories.map((categorie,i)=>{
                   <div style={{width:'100%',height:'10%',display:'flex',justifyContent:'space-evenly',border:'1px solid grey',marginBottom:'1%'}}>

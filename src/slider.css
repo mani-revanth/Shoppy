@@ -2,7 +2,7 @@
 
 .slick-slide > div {
   height: 30vh !important;
-  position: relative;
+  position: relative !important;
   min-width:100% !important;
   display: flex;
   background-color: orange;
@@ -11,3 +11,7 @@
 }
 
 
+.slick-next,
+.slick-prev{
+  color:black !important;
+}
