@@ -314,7 +314,9 @@ app.post("/get_product",async(req,res)=>{
 
 app.post("/update_product",async (req,res)=>{
     const abc=await product_details_model.findOne({_id:(req.body)._id});
-    abc=(req.body);
+    abc.images=(req.body).images;
+    abc.themes=(req.body).themes;
+    abc.categories=(req.body).categories;
     abc.save();
     res.send("yes");
 })

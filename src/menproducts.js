@@ -11,7 +11,7 @@ import { useInView } from "react-intersection-observer";
 //import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Switch, TextField } from "@mui/material";
+import { Chip, Switch, TextField } from "@mui/material";
 import Tooltip from '@mui/material/Tooltip';
 //import {Link} from 'react-router-dom';
 import { UseUserAuth } from './context/UserAuthContext';
@@ -48,6 +48,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "./slider.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import {Paper} from '@mui/material';
 
 //import {Card} from '@mui/material';
 //import TextField from '@mui/material';
@@ -534,6 +535,7 @@ useEffect(()=>{
   axios.post("http://localhost:5000/get_product",{_id:id2}).then((res)=>{
     setImages(res.data.images);
     setThemes(res.data.themes);
+    setCategories(res.data.categories);
   })
 },[]);
 
@@ -548,110 +550,140 @@ useEffect(()=>{
               {toggle?
 
               <div className="product_card" style={{height:'100%',width:'100%',backgroundColor:'white',justifyContent:'space-evenly',textAlign:'center',padding:'5%'}} onClick={(e)=>{e.stopPropagation();}}>
-              {toggle1 ? 
+                    {toggle1 ? 
 
 
 
-              <>
+                      <>
 
-              <div style={{height:'30vh',marginBottom:'3vh',width:'100%'}}>
-              {
-                (images.length==0 || addingToggle1) ?
+                      <div style={{height:'30vh',marginBottom:'3vh',width:'100%'}}>
+                      {
+                            (images.length==0 || addingToggle1) ?
 
 
-                <div style={{backgroundColor:'white',height:'fit-content',padding:'2%',border:'1px solid black',marginBottom:'3%'}}>
-                <TextField style={{width:'100%',marginBottom:'2%'}} label="image" value={image} onChange={(e)=>{setImage(e.target.value);}}/>
-                <TextField style={{width:'100%',marginBottom:'2%'}} label="theme" value={theme} onChange={(e)=>{setTheme(e.target.value);}}/>
-                <Button1 onClick={()=>{
-                  if(image.trim()=="" || theme.trim()=="")
-                  {
-                    alert("fill all the fields completely");
-                  }
-                  else
-                  {
-                    let abc=images;
-                    abc.push(image);
-                    let bcd=themes;
-                    bcd.push(theme);
-                    setImages(abc);
-                    setThemes(bcd);
-                    console.log(images);
-                    console.log(themes);
-                    setImage("");
-                    setTheme("");
-                  }
-                  }}
-                  >add</Button1>
-              </div>
+                            <div style={{backgroundColor:'white',height:'fit-content',padding:'2%',border:'1px solid grey',borderRadius:'10px',marginBottom:'3%'}}>
+                            <TextField style={{width:'100%',marginBottom:'2%'}} label="image" value={image} onChange={(e)=>{setImage(e.target.value);}}/>
+                            <TextField style={{width:'100%',marginBottom:'2%'}} label="theme" value={theme} onChange={(e)=>{setTheme(e.target.value);}}/>
+                            <Button1 onClick={()=>{
+                            if(image.trim()=="" || theme.trim()=="")
+                            {
+                              alert("fill all the fields completely");
+                            }
+                            else
+                            {
+                              let abc=images;
+                              abc.push(image);
+                              let bcd=themes;
+                              bcd.push(theme);
+                              setImages(abc);
+                              setThemes(bcd);
+                              console.log(images);
+                              console.log(themes);
+                              setImage("");
+                              setTheme("");
+                            }
+                            }}
+                            >add</Button1>
+                            </div>
 
-              :
+                            :
 
-              <Slider {...settings} 
-              nextArrow={<FontAwesomeIcon icon={faChevronRight}/>}
-              prevArrow={<FontAwesomeIcon icon={faChevronLeft}/>}
-              >
-              {
-                images.map((image,i)=>{
-                  return(
-                  <div key={image+i}>
-                    <div style={{backgroundColor:`${themes[i]}`,width:'100%',position:'absolute',height:'100%',top:0,display:'flex',justifyContent:'flex-end',borderRadius:'5px'}}>
-                    <img src={image} style={{height:'100%',position:'absolute',width:'auto',transform:'translate(-50%)',left:'50%'}}/>
-                    <Button1 style={{height:'fit-content',backgroundColor:'#F15A59',border:'1px solid white'}} onClick={()=>{
-                      let abc=[...images];
-                      abc.splice(i,1);
-                      let bcd=[...themes];
-                      bcd.splice(i,1);
-                      console.log(abc);
-                      console.log(bcd);
-                      setImages(abc);
-                      setThemes(bcd);
-                    }}>delete</Button1>
+                            <Slider {...settings} 
+                              nextArrow={<FontAwesomeIcon icon={faChevronRight}/>}
+                              prevArrow={<FontAwesomeIcon icon={faChevronLeft}/>}
+                              >
+                                  {
+                                    images.map((image,i)=>{
+                                      return(
+                                          <div key={image+i}>
+                                            <div style={{backgroundColor:`${themes[i]}`,width:'100%',position:'absolute',height:'100%',top:0,display:'flex',justifyContent:'flex-end',borderRadius:'5px'}}>
+                                                <img src={image} style={{height:'100%',position:'absolute',width:'auto',transform:'translate(-50%)',left:'50%'}}/>
+                                                <Button1 style={{height:'fit-content',backgroundColor:'#F15A59',border:'1px solid white'}} onClick={()=>{
+                                                let abc=[...images];
+                                                abc.splice(i,1);
+                                                let bcd=[...themes];
+                                                bcd.splice(i,1);
+                                                console.log(abc);
+                                                console.log(bcd);
+                                                setImages(abc);
+                                                setThemes(bcd);
+                                                }}
+                                                >delete</Button1>
+                                            </div>
+                                          </div>
+                                      )
+                                      })
+                                  }
+                            </Slider>
+                      }
+
+
                     </div>
-                  </div>
-                  )
-                })
-              }
-              </Slider>
-              }
-              </div>
 
-              {
-                images.length ?
-                <Button1 onClick={()=>{setAddingToggle1(!addingToggle1)}}>{addingToggle1 ? "back" : "add"}</Button1> :
-                null
-              }
+                    {
+                      images.length ?
+                      <Button1 style={{marginBottom:'3%'}} onClick={()=>{setAddingToggle1(!addingToggle1)}}>{addingToggle1 ? "back" : "add"}</Button1> :
+                      null
+                    }
 
-              
-              {
-                categories.map((categorie,i)=>{
-                  <div style={{width:'100%',height:'10%',display:'flex',justifyContent:'space-evenly',border:'1px solid grey',marginBottom:'1%'}}>
-                    <h1>{categorie}</h1>
-                    <Button1 style={{backgroundColor:'#F45050'}} onClick={()=>{
-                      setCategories([...categories.slice(0,i),...categories.slice(i)]);
-                    }}>
-                    delete
-                    </Button1>
-                  </div>
-                })
-              }
+                    <Paper
+                      sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      flexWrap: 'wrap',
+                      listStyle: 'none',
+                      backgroundColor:'white',
+                      marginBottom:'3%',
+                      overflow:'scroll',
+                      maxHeight:'20vh',
+                      p: 0.5,
+                    }}
+                    >
+                    {
+                      categories.map((categorie,i)=>{
+                        return (
+                          <Chip key={i} style={{margin:'2%'}} label={categorie} onDelete={()=>{
+                            let abc=[...categories];
+                            abc.splice(i,1);
+                            setCategories(abc);
+                          }}/>
+                        )
+                      })
+                    }
+                    </Paper>
 
-              <div style={{backgroundColor:'white',height:'fit-content',padding:'2%',border:'1px solid black'}}>
-                <TextField style={{width:'100%',marginBottom:'2%'}} label="categorie" value={categorie} onChange={(e)=>{setCategorie(e.target.value);}}/>
+                    <div style={{backgroundColor:'white',height:'fit-content',padding:'2%',border:'1px solid black',display:'flex',justifyContent:'space-between',borderRadius:'5px'}}>
+                      <TextField style={{width:'100%',marginRight:'2%'}} label="categorie" value={categorie} onChange={(e)=>{setCategorie(e.target.value);}}/>
                 
-                <Button1 onClick={()=>{
-                  if(categorie.trim()!="")
-                  {
-                    setCategories([...categories,categorie]);
-                  }
-                  else
-                  alert("fill all the fields");
-                  }}
-                  >add categorie</Button1>
-              </div>
+                      <Button1 style={{minHeight:'100%'}} onClick={()=>{
+                      if(categorie.trim()!="")
+                      {
+                        setCategories([...categories,categorie]);
+                        //console.log(categories);
+                        setCategorie("");
+                      }
+                      else
+                        alert("fill all the fields");
+                      }}
+                      >Add</Button1>
+                    </div>
 
-              </>
+                    <div style={{width:'100%',display:'flex',justifyContent:'space-between',marginTop:'3%'}}>
+                        <Button1 onClick={()=>{setToggle1(false)}}>back</Button1>
+                        <Button1 onClick={()=>{
+                          axios.post("http://localhost:5000/update_product",{_id:id2,images:images,themes:themes,categories:categories}).then((res)=>{
+                              if(res.data=="yes")
+                              {
+                                alert("product updated successfully");
+                                window.location.reload();
+                              }
+                            })
+                          }}>Update</Button1>
+                    </div>
+
+                    </>
               
-              :
+                  :
 
 
               <>
