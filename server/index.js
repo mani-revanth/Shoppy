@@ -286,14 +286,14 @@ app.post("/get_length_of_cart", (req, res) => {
 
 
 
-app.post("/add_new_product", async (req, res) => {
+/*app.post("/add_new_product", async (req, res) => {
     const abc = await product_details_model.findOne({ _id: (req.body)._id });
     if (abc == null) {
         const product = new product_details_model(req.body);
         product.save();
     }
     res.send("yes");
-})
+})*/
 
 
 
@@ -338,7 +338,7 @@ app.post("/update_men_product", async (req, res) => {
     res.send("yes");
 })
 
-app.post("/push_cards_into_array", async (req, res) => {
+app.post("/add_new_product_men", async (req, res) => {
     //console.log(req.body);
     //console.log("\n\n\n\n\n\n\n\n");
     let x = {
@@ -354,13 +354,16 @@ app.post("/push_cards_into_array", async (req, res) => {
     //console.log("hello world");
     const abc = await cards_for_men_model.findOne({ _id: (req.body).id });
     abc.products_array.push(x);
-    abc.save();
+    await abc.save();
+    const product=new product_details_model({_id:(abc.products_array[(abc.products_array).length-1]._id),...x,id1:(req.body.id),gender:0,images:[],themes:[],categories:[],comments:[]});
+    await product.save();
     res.send("yes");
 })
 
 
 app.post("/remove_card_from_array", async (req, res) => {
     await cards_for_men_model.updateOne({ _id: (req.body).main_id }, { $pull: { products_array: { _id: (req.body).temp_id } } });
+    await product_details_model.deleteOne({_id:(req.body).temp_id});
     res.send("yes");
 })
 
@@ -394,7 +397,7 @@ app.post("/get_men_cards", (req, res) => {
 })
 
 ////////////////////////////////////////////////////////////////WOMEN PRODUCT HANDLING/////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////BRANDS PRODUCT HANDLING///////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////BRANDS PRODUCT HANDLING////////////////////////////////////////////////////////////////
 
 
 app.post("/update_brand_product", async (req, res) => {

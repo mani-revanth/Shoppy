@@ -23,7 +23,7 @@ import Marquee from 'react-fast-marquee';
 import { map } from '@firebase/util';
 import { AiFillInstagram, AiFillLinkedin } from 'react-icons/ai';
 import { BsFillTelephoneFill, BsTwitter, BsFacebook } from 'react-icons/bs';
-import { ImLocation } from 'react-icons/im';
+import { ImCross, ImLocation } from 'react-icons/im';
 import { MdSmartphone } from 'react-icons/md';
 import { GrMail } from 'react-icons/gr';
 import {
@@ -36,7 +36,7 @@ import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Rating } from 'primereact/rating';
 import { Tag } from 'primereact/tag';
 import { warning } from '@remix-run/router';
-import { Button } from 'bootstrap';
+import { Button } from 'react-bootstrap';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Link } from 'react-router-dom';
@@ -46,9 +46,11 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./slider.css";
+//import Button from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faCircleXmark, faCross, faMarsStrokeRight, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Paper } from '@mui/material';
+import {Modal} from '@mui/material';
 
 //import { RedirectFunction } from 'react-router-dom';
 //import {Card} from '@mui/material';
@@ -346,8 +348,8 @@ const update_best_sellermen = (id, x) => {
   })
 }
 
-const add_best_seller_men = (id, x) => {
-  axios.post("http://localhost:5000/add_new_card_bestsellermen", { id1: id, ...x }).then((res) => {
+const add_best_seller_men = (id1,id2, x) => {
+  axios.post("http://localhost:5000/add_new_card_bestsellermen", { id1: id1, ...x }).then((res) => {
     if (res.data == "yes") {
       alert("product was added to best seller men");
     }
@@ -713,7 +715,7 @@ const GridItem = (props) => {
                       x.is_best_seller = 0;
                     update_card_from_array(props.id, card._id, x, props.index);
                     if (x.is_best_seller)
-                      add_best_seller_men(card._id, x);
+                      add_best_seller_men(card._id,x);
                     else
                       remove_best_seller_man(card._id);
                   }}>{`${card.is_best_seller ? "remove from best seller" : "add to best seller"}`}</Button1></div>
@@ -824,11 +826,17 @@ export function MenProductDetails(){
 
 
 
+
 export function ProductDisplay(props) {
 
   const location = useLocation();
   const { id } = useParams();
   const navigate=useNavigate();
+  const [open,setOpen]=useState(false);
+  const [image,setImage]=useState("");
+  const [name,setName]=useState("");
+  const [cost,setCost]=useState("");
+  const [des,setDes]=useState("");
 
 
   const [products, setProducts] = useState(location.state ? location.state.products : null);
@@ -837,8 +845,7 @@ export function ProductDisplay(props) {
 
   useEffect(() => {
     //console.log(user);
-    console.log(id);
-    if (products == null) {
+    //console.log(id);
       axios.post("http://localhost:5000/get_sub_cards_men", { id: id }).then((res) => {
         //setProducts(res.data);
         //console.log(typeof(res.data));
@@ -847,7 +854,6 @@ export function ProductDisplay(props) {
         else
         navigate("/",{replace:true});
       });
-    }
   }, []);
 
   const getSeverity = (product) => {
@@ -866,8 +872,57 @@ export function ProductDisplay(props) {
 
   return (
     <div style={{ width: '100hw', height: '100vh' }}>
+      {(user=="ch.m.s.revanth@gmail.com")?
+      <>
+      <Modal open={open}>
+          <div style={{height:'fit-content',display:'flex',flexDirection:'column',width:'100%',maxWidth:'30rem',minWidth:'20rem',position:'absolute',left:'50%',translate:'-50%',justifyContent:'space-evenly',padding:'3%',borderRadius:'5px',backgroundColor:'white'}}>
+            
+              <Button style={{position:'absolute',right:'0.5vh',top:'0.5vh',backgroundColor:'gray'}}>
+                  <FontAwesomeIcon icon={faXmark}  style={{color:'white'}}/>
+              </Button>
+            
+            <div style={{width:'100%',alignItems:'center',display:'flex',justifyContent:'center',marginBottom:'2%'}}>
+            {
+              (image.trim()!="")?
+              <img src={image} style={{height:'20vh',width:'20vh',borderRadius:'10px'}}/>:
+              null
+            }
+            </div>
+            <TextField style={{marginBottom:'3%',width:'100%'}} label="image" onChange={(e)=>{setImage(e.target.value)}}/>
+            <TextField style={{marginBottom:'3%',width:'100%'}} label="title" onChange={(e)=>{setName(e.target.value)}}/>
+            <TextField style={{marginBottom:'3%',width:'100%'}} label="description" onChange={(e)=>{setDes(e.target.value)}}/>
+            <TextField style={{marginBottom:'3%',width:'100%'}} type="number" label="cost" onChange={(e)=>{setCost(e.target.value)}}/>
+            <Button style={{width:'100%',padding:'2%'}} onClick={(e)=>{
+              if(image.trim()!="" && name.trim()!="" && des.trim()!="" && cost.trim()!="")
+              {
+                e.target.disabled="true";
+                axios.post("http://localhost:5000/add_new_product_men",{id:id,card_title:`${name}`,card_description:`${des}`,card_image_src:`${image}`,card_cost:cost}).then((res)=>{
+                  if(res.data=="yes")
+                  {
+                    alert("product was added succeesfully");
+                    window.location.reload();
+                  }
+                })
+              }
+              else
+              alert("please fill all the fields completely");
+            }}><h1>Add product</h1></Button>
+          </div>
+      </Modal>
+      <Button style={{position:'absolute',zIndex:'100',right:'1vh',bottom:'1vh',height:'10vh',width:'10vh',borderRadius:'50%'}} onClick={()=>{setOpen(true)}}>
+          <FontAwesomeIcon icon={faPlus} style={{color: "#ffffff",}} />
+      </Button>
+      </>
+      :
+      null
+      }
+      
+      
       <MyNavBar />
-      <div style={{ overflowY: 'scroll', width: '100hw', height: '90vh' }}>
+      
+      
+      
+      <div style={{ overflowY: 'scroll', width: '100hw', height: '90vh' ,position:'relative' }}>
         <div className="card">
           {/*<DataView value={products} layout={layout} itemTemplate={itemTemplate}/>*/}
           <Box sx={{ flexGrow: 1, p: 2 }}>
