@@ -44,6 +44,7 @@ import Cart_screen from './cart_screen';
 import Billing_protected_route from './components/billing_protected_route';
 import Billing_screen from './admin_cart';
 import BasicDemo from './components/products';
+import ProductScreen from './productScreen';
 //import { Bill_screen } from './cart_screen';
 //import {Men_products} from './menproducts';
 
@@ -63,7 +64,7 @@ function App() {
             <Route path="/billing" element={<Billing_protected_route><Billing_screen/></Billing_protected_route>}/>
             <Route exact path="/men" element={<Men_products/>}/>
             <Route exact path="/men/:id" element={<ProductDisplay/>}/>
-            <Route exact path="/men/:id1/:id2" element={<MenProductDetails/>} />
+            <Route exact path="/product/:id" element={<ProductScreen/>} />
             <Route exact path="/women" element={<Women_products/>}/>
             <Route exact path="/women/:id" element={<ProductDisplayWomen/>} />
       </Routes>

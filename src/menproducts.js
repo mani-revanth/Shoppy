@@ -348,8 +348,9 @@ const update_best_sellermen = (id, x) => {
   })
 }
 
-const add_best_seller_men = (id1,id2, x) => {
-  axios.post("http://localhost:5000/add_new_card_bestsellermen", { id1: id1, ...x }).then((res) => {
+const add_best_seller_men = (id1, x) => {
+  
+  axios.post("http://localhost:5000/add_new_card_bestsellermen", {...x,id1:id1 }).then((res) => {
     if (res.data == "yes") {
       alert("product was added to best seller men");
     }
@@ -494,6 +495,7 @@ const GridItem = (props) => {
   const [offer, setOffer] = useState(card.offer);
   const [warning, setWarning] = useState(card.warning);
   let options = ['IN STOCK', 'OUT OF STOCK', 'LOW STOCK'];
+  
   const getSeverity = (product) => {
     switch (product.warning) {
       case 'IN STOCK':
@@ -538,7 +540,7 @@ const GridItem = (props) => {
 
   return (
     <div className="col-12 sm:col-6 lg:col-12 xl:col-4 p-2" onClick={() => {
-      navigate(`/men/${id1}/${id2}`);
+      navigate(`/product/${id2}`);
     }}>
       <div className="p-4 border-1 surface-border surface-card border-round" style={{ width: '100%', height: '100%', overflow: 'scroll' }}>
 
@@ -553,7 +555,7 @@ const GridItem = (props) => {
 
               <>
 
-                <div style={{ height: '30vh', marginBottom: '3vh', width: '100%' }}>
+                <div style={{ height: '30vh', marginBottom: '5vh', width: '100%' }}>
                   {
                     (images.length == 0 || addingToggle1) ?
 

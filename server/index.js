@@ -95,6 +95,8 @@ const current_cart = new mongoose.Schema({
         warning: String,
         offer: Number,
         is_best_seller: Number,
+        quantity: Number,
+        size : String,
     }],
 })
 
@@ -559,6 +561,7 @@ app.post("/push_cards_into_array_women", async (req, res) => {
 app.post("/add_new_card_bestsellermen", (req, res) => {
     //console.log("hello world");
     const x = new best_sellers_for_men_model(req.body);
+    //console.log(req.body);
     x.save();
     res.send("yes");
 })
