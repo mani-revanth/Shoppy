@@ -535,11 +535,16 @@ const GridItem = (props) => {
       setImages(res.data.images);
       setThemes(res.data.themes);
       setCategories(res.data.categories);
+      setTitle(res.data.card_title);
+      setDes(res.data.card_description);
+      setCost(res.data.card_cost);
+      setOffer(res.data.offer);
+      setWarning(res.data.warning);
     })
   }, []);
 
   return (
-    <div className="col-12 sm:col-6 lg:col-12 xl:col-4 p-2" onClick={() => {
+    <div style={{height:'100%'}} onClick={() => {
       navigate(`/product/${id2}`);
     }}>
       <div className="p-4 border-1 surface-border surface-card border-round" style={{ width: '100%', height: '100%', overflow: 'scroll' }}>
@@ -785,8 +790,8 @@ const GridItem = (props) => {
             </div>
 
 
-            <div className="flex flex-column align-items-center gap-3 py-5">
-              <img className="w-9 shadow-2 border-round" src={product.card_image_src} alt={product.name} style={{ height: '150%', width: '100%' }} />
+            <div className="flex flex-column align-items-center gap-3 py-5" >
+              <img className="w-9 shadow-2 border-round" src={product.card_image_src} alt={product.name} style={{ height: '40Vmin', width: '100%' }} />
               <h1 className="text-2xl font-bold">{product.card_title}</h1>
               <h3>{product.card_description}</h3>
 
@@ -945,7 +950,11 @@ export function ProductDisplay(props) {
               {
                 products ?  
                 products.map((product, i) => {
-                  return <GridItem key={i} product={product} user={user} id={id} index={i} />
+                  return (
+                    <Grid key={i} {...{ xs: 12, sm: 6, md: 4, lg: 3 }} >
+                      <GridItem product={product} user={user} id={id} index={i} />
+                    </Grid>
+                  )
                 })
                 :
                 null

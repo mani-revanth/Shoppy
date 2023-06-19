@@ -316,6 +316,16 @@ app.post("/update_product", async (req, res) => {
 
 
 
+app.post("/add_review", async (req, res) => {
+    const abc = await product_details_model.findOne({ _id: (req.body).id });
+    abc.comments.push((req.body).comment);
+    abc.save();
+    res.send("yes");
+})
+
+
+
+
 ///////////////////////////////////////////////////////MEN PRODUCT HANDLING////////////////////////////////////////////////////////////////////
 
 
@@ -398,86 +408,9 @@ app.post("/get_men_cards", (req, res) => {
     })
 })
 
+
 ////////////////////////////////////////////////////////////////WOMEN PRODUCT HANDLING/////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////BRANDS PRODUCT HANDLING////////////////////////////////////////////////////////////////
 
-
-app.post("/update_brand_product", async (req, res) => {
-    const abc = await cards_for_men_model.findOne({ _id: (req.body).id1 });
-    let x = {
-        _id: (req.body).id2,
-        card_title: (req.body).card_title,
-        card_description: (req.body).card_description,
-        card_image_src: (req.body).card_image_src,
-        card_cost: (req.body).card_cost,
-        warning: (req.body).warning,
-        offer: (req.body).offer,
-        is_best_seller: (req.body).is_best_seller,
-    }
-    abc.products_array[(req.body).i] = x;
-    abc.save();
-    res.send("yes");
-})
-
-app.post("/push_cards_into_array_brands", async (req, res) => {
-    //console.log(req.body);
-    //console.log("\n\n\n\n\n\n\n\n");
-    let x = {
-        card_title: `${req.body.card_title}`,
-        card_description: `${req.body.card_description}`,
-        card_image_src: `${req.body.card_image_src}`,
-        card_cost: `${req.body.card_cost}`,
-        warning: " ",
-        offer: 0,
-        is_best_seller: 0,
-    }
-    //console.log(x);
-    //console.log("hello world");
-    const abc = await cards_for_men_model.findOne({ _id: (req.body).id });
-    abc.products_array.push(x);
-    abc.save();
-    res.send("yes");
-})
-
-
-app.post("/remove_card_from_array_brands", async (req, res) => {
-    await cards_for_men_model.updateOne({ _id: (req.body).main_id }, { $pull: { products_array: { _id: (req.body).temp_id } } });
-    res.send("yes");
-})
-
-app.post("/get_sub_cards_men_brands", (req, res) => {
-    cards_for_men_model.findOne({ _id: (req.body).id }, (err, abc) => {
-        if (err)
-            console.log(err);
-        else
-            res.send(abc.products_array);
-    })
-})
-
-
-app.post("/add_brand_card", (req, res) => {
-    //console.log("hello world");
-    const x = new cards_for_men_model(req.body);
-    x.save();
-    res.send("yes");
-})
-
-
-app.post("/get_brand_cards", (req, res) => {
-    cards_for_men_model.find({}, function (err, abc) {
-        if (err) {
-            console.log(err);
-        }
-        else
-            res.send(abc);
-    })
-})
-
-
-
-
-
-////////////////////////////////////////////////////////////////BRANDS PRODUCT HANDLING///////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////WOMEN PRODUCT HANDLING/////////////////////////////////////////////////////////////////
 
 app.post("/update_women_product", async (req, res) => {
@@ -493,6 +426,9 @@ app.post("/update_women_product", async (req, res) => {
         is_best_seller: (req.body).is_best_seller,
     }
     abc.products_array[(req.body).i] = x;
+    const product = await product_details_model.findOne({ _id: (req.body).id2 });
+    product.set(x);
+    product.save();
     abc.save();
     res.send("yes");
 })
@@ -531,7 +467,7 @@ app.post("/remove_card_from_array_women", async (req, res) => {
 })
 
 
-app.post("/push_cards_into_array_women", async (req, res) => {
+app.post("/add_new_product_women", async (req, res) => {
     //console.log(req.body);
     //console.log("\n\n\n\n\n\n\n\n");
     let x = {
@@ -547,6 +483,9 @@ app.post("/push_cards_into_array_women", async (req, res) => {
     //console.log("hello world");
     const abc = await cards_for_women_model.findOne({ _id: (req.body).id });
     abc.products_array.push(x);
+    await abc.save();
+    const product=new product_details_model({_id:(abc.products_array[(abc.products_array).length-1]._id),...x,id1:(req.body.id),gender:0,images:[],themes:[],categories:[],comments:[]});
+    await product.save();
     abc.save();
     res.send("yes");
 })

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React,{useState,useEffect,useRef} from 'react';
 import ReactDOM from 'react-dom';
-import { useParams } from 'react-router-dom';
+import { useParams ,useNavigate} from 'react-router-dom';
 import MyNavBar from './components/navbar';
 import { Tag } from 'primereact/tag';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,6 +14,9 @@ import { Chip, InputLabel, Menu, Select, SvgIcon } from '@mui/material';
 import { Rating } from '@mui/material';
 import { Button, FormControl } from 'react-bootstrap';
 import {MenuItem} from '@mui/material';
+import {Modal} from '@mui/material';
+import { TextareaAutosize } from '@mui/material';
+import { DataView } from 'primereact/dataview';
 
 /*card_title: String,
     card_description: String,
@@ -42,9 +45,13 @@ export default function ProductScreen(){
     const ref=useRef(null);
     const sizes=['XS','S','M','L','XL','XXL','XXXL'];
     const [sizeIndex,setSizeIndex]=useState(-1);
-    const [rating,setRating]=useState(0);
+    const [rating,setRating]=useState(1);
     const [quantity,setQuantity]=useState(1);
-
+    const [open,setOpen]=useState(false);
+    const [review,setReview]=useState('');
+    const [comments,setComments]=useState([]);
+    const [avgRating,setAvgRating]=useState(0);
+    const navigate=useNavigate();
 
     const getSeverity = (product) => {
         switch (product.warning) {
@@ -65,15 +72,45 @@ export default function ProductScreen(){
 
     useEffect(()=>{
         axios.post("http://localhost:5000/get_product",{_id:id}).then((res)=>{
+            if(res.data){
             setProduct(res.data);
             let x=0;
             for(var i in res.data.comments){
                 x=x+res.data.comments[i].rating;
             }
             setRating(Number((x/res.data.comments.length).toFixed(1)));
+            setComments(res.data.comments);
+            let sum=0;
+            for(var i of res.data.comments){
+                sum=sum+i.rating;
+            }
+            setAvgRating(Number((sum/res.data.comments.length).toFixed(1)));
+            }
+            else{
+                navigate('/404',{replace:true});
+            }
         })
-    })
+    },[]);
 
+
+
+    const itemTemplate = (comment) => {
+        return (
+            <div className="col-12">
+                <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
+                    <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                        <div className="flex flex-column align-items-center sm:align-items-start gap-3">
+                            <div className="text-2xl font-bold text-900">{comment.name}</div>
+                            <Rating value={comment.rating} readOnly></Rating>
+                            <div className="flex align-items-center gap-3">
+                                <h4>{comment.text}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
 
 
     return(
@@ -93,7 +130,7 @@ export default function ProductScreen(){
                         <p style={{color:'grey',fontSize:'3vh',fontWeight:400,fontFamily:'Manrope'}}>{product.card_description}</p>
                         <h2>₹ {product.card_cost}</h2>
 
-                        <Rating value={rating} readOnly style={{color:'black',fontSize:'5vh',fontWeight:400,fontFamily:'Manrope',marginBottom:'1vh'}}/>
+                        <Rating value={avgRating} readOnly style={{fontSize:'5vh',fontWeight:400,fontFamily:'Manrope',marginBottom:'1vh'}}/>
 
                         <h3 style={{fontFamily:'Manrope'}}>color :</h3>
                         <div style={{display:'flex',width:'50%',height:'fit-content'}}>
@@ -187,7 +224,55 @@ export default function ProductScreen(){
                         </div>
                     </div>
                 </div>
-            </div>:
+                <div style={{maxHeight:'90vh',height:'fit-content',width:'100%',padding:'3%'}}>
+                            <Modal open={open} onClose={()=>{setOpen(false)}} aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description">
+                                <div style={{height:'fit-content',width:'100%',maxWidth:'30rem',minWidth:'15rem',position:'absolute',display:'flex',flexDirection:'column',padding:'3%',left:'50%',transform:'translate(-50%)',backgroundColor:'white',borderRadius:'10px'}}>
+                                    rate:
+                                    <Rating name="simple-controlled" size="large" value={rating} onChange={(event,newValue) => {
+                                        setRating(newValue);
+                                    }} />
+                               <TextareaAutosize value={review} aria-label="minimum height" minRows={3} placeholder="eneter your rivew here" style={{width:'100%',marginTop:'2%',marginBottom:'3%'}} onChange={(event)=>{
+                                      setReview(event.target.value);
+                               }}/>
+                               <Button onClick={()=>{
+                                      //console.log(user,rating,review,id);
+                                      let comment={
+                                        name:`${user}`,
+                                        text:`${review}`,
+                                        rating:rating,
+                                      }
+                                      axios.post('http://localhost:5000/add_review',{id:id,comment:comment}).then((res)=>{
+                                        if(res.data=="yes"){
+                                             alert("review added");
+                                             window.location.reload();
+                                        }
+                                        else{
+                                             alert("some error occured");
+                                        }
+                                      })
+                               }}>
+                                      <h3>Submit</h3>
+                               </Button>
+                                </div>
+                            </Modal>
+                            <div style={{width:'100%',height:'fit-content',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                            <h2>Reviews</h2>
+                            <Button onClick={()=>{setOpen(true)}}><h3>Add review</h3></Button>
+                            </div>
+                            <hr style={{width:'20%'}}/>
+                            {
+                            comments.length>0 ?
+                            <div style={{width:'100%',maxHeight:'75vh',height:'fit-content',boxShadow:'0px 0px 3px black',borderRadius:'15px'}}>
+                                    <DataView value={comments} itemTemplate={itemTemplate} paginator rows={5} />
+                            </div>
+                            :
+                            <div style={{width:'100%',height:'fit-content',display:'flex',justifyContent:'center',alignItems:'center'}}>
+                                <h3>No reviews yet</h3>
+                            </div>
+                            }
+                </div>
+            </div>
+            :
             null
             }
         </div>

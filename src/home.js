@@ -512,12 +512,12 @@ function BestSellersForWomen() {
                 <h4>{abc.card_title}.</h4>
                 {/*<div style={{display:'flex',overflowX:'scroll'}}><p>{abc.card_description}</p></div>*/}
                 <h6>cost : {abc.card_cost}</h6>
-                {(user.email == "ch.m.s.revanth@gmail.com" ?/*<button   onClick={()=>{
+                {/*user.email == "ch.m.s.revanth@gmail.com" ?/*<button   onClick={()=>{
               delete_card_bestsellerwomen(abc);
               axios.post("http://localhost:5000/get_cards_bestsellerwomen",{}).then((res)=>{
             setCardsarray1(res.data);
             })
-            }} style={{backgroundColor:'#393E46',borderRadius:'5px',color:'white',height:'15%',width:'80%'}}>delete</button>*/null :
+            }} style={{backgroundColor:'#393E46',borderRadius:'5px',color:'white',height:'15%',width:'80%'}}>delete</button>null :
                   <button style={{ backgroundColor: '#ABC270', borderRadius: '5px', color: 'white', height: '10%', width: '80%' }}
                     onClick={(e) => {
                       e.preventDefault();
@@ -526,7 +526,7 @@ function BestSellersForWomen() {
                           alert("item was added to your cart succesfully");
                       })
                     }}
-                  >add to cart</button>)}
+                  >add to cart</button>)*/}
               </div>
             </Card_box>
           )
