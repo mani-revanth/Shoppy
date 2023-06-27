@@ -302,6 +302,7 @@ export default function ProductScreen() {
 
 
 
+                        <div className="slider2">
                         <Slider {...settings} style={{height:'100%',backgroundColor:'white'}} 
                         nextArrow={<FontAwesomeIcon icon={faChevronRight} />}
                         prevArrow={<FontAwesomeIcon icon={faChevronLeft} />}
@@ -311,7 +312,7 @@ export default function ProductScreen() {
                                 similarProducts.map((product, i) => {
                                     if (product._id != id) {
                                         return (
-                                            <div key={i} style={{ height: '30rem', width: '30%', cursor: 'pointer' ,border:'1px solid black'}} onClick={() => {
+                                            <div  key={i} style={{ height: '30rem', width: '30%', cursor: 'pointer' ,border:'1px solid black'}} onClick={() => {
                                                 window.location.href = `/product/${product._id}`;
                                             }}>
                                                 <div style={{ color: 'black', height: '25rem', width: '15rem', backgroundColor: 'transparent', borderRadius: '5px', margin: '0.5rem' }}>
@@ -329,6 +330,7 @@ export default function ProductScreen() {
                             }
 
                         </Slider>
+                        </div>
 
 
 
