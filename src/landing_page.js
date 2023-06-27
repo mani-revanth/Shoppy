@@ -427,7 +427,7 @@ export default function Landing_page()
                 }}
             />
             <br/><br/>
-          <a href={`mailto:ch.m.s.revanth@gmail.com?subject=${"just to get in touch"}&body=${email}`}><button onClick={()=>{setEmail("")}} style={{backgroundColor:'#00F5FF',minHeight:'3rem',minWidth:'8rem',maxHeight:'15rem',maxWidth:'20rem',borderRadius:'10px',paddingLeft:'1%',paddingRight:'1%'}}>send email</button></a>
+          <a href={`mailto:ch.m.s.revanth@gmail.com?subject=${"just to get in touch"}&body=${email}`}><button onClick={()=>{setEmail("")}} style={{backgroundColor:'white',minHeight:'3rem',minWidth:'8rem',maxHeight:'15rem',maxWidth:'20rem',borderRadius:'10px',paddingLeft:'1%',paddingRight:'1%'}}>send email</button></a>
           <br/>
           <br/>
           <div style={{width:'100%',display:'flex',alignItems:'center',justifyContent:'center',textAlign:'center',fontSize:'1.6Vmax'}}>

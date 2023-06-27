@@ -1,4 +1,4 @@
-.slick-slide > div {
+.slider2 .slick-slide > div {
     height: 25rem !important;
     position: relative !important;
     background-color: white !important;
@@ -15,6 +15,6 @@
     align-items: center;
   }
 
-  .slick-slide{
+.slider2  .slick-slide{
     padding:0.5%;
   }
