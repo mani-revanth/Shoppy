@@ -284,6 +284,15 @@ app.post("/get_length_of_cart", (req, res) => {
 })
 
 
+app.post("/change_quantity", async (req, res) => {
+    const abc = await current_cart_model.findOne({ user_name: (req.body).name });
+    abc.cart_items[req.body.index].quantity = req.body.quantity;
+    abc.save();
+    res.send("yes");
+})
+
+
+
 ////////////////////////////////////////////////////////Product HANDLING FUNCTIONS////////////////////////////////////////////////////////////////
 
 
