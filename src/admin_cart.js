@@ -21,6 +21,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import axios from 'axios';
 import Marquee from 'react-fast-marquee';
 import { map } from '@firebase/util';
+import MyNavBar from './components/navbar';
 
 
 
@@ -169,7 +170,7 @@ export default function Billing_screen(){
     },[]);
     return(
         <div style={{height:'100%',width:'100%'}}>
-           <CollapsibleExample/>
+           <MyNavBar/>
            <div style={{height:'90vh',overflowY:'scroll',overflowX:'hidden',justifyContent:'start',paddingLeft:'10%',paddingRight:'10%'}}>
             {
               all_bills.map((temp,i)=>{

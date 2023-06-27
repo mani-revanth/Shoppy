@@ -1,0 +1,20 @@
+.slick-slide > div {
+    height: 25rem !important;
+    position: relative !important;
+    background-color: white !important;
+    color: black !important;
+    align-items: flex-end;
+    flex-direction: column;
+    display: flex;
+    text-align: center;
+    cursor: pointer;
+    width: fit-content;
+    padding: 2%;
+    border-radius: 10px;
+    background-color: lightgrey !important;
+    align-items: center;
+  }
+
+  .slick-slide{
+    padding:0.5%;
+  }

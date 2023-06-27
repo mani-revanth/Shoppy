@@ -71,9 +71,12 @@ const MyNavBar = () => {
   }
   const funny = () => {
     //console.log(abcdefg);
+    if(user!="ch.m.s.revanth@gmail.com")
+    {
     axios.post("http://localhost:5000/get_length_of_cart", { name: `${user}` }).then((res) => {
       set_cart_length(res.data);
     })
+    }
   }
   useEffect(() => {
     setInterval(() => {
@@ -92,12 +95,12 @@ const MyNavBar = () => {
             <a ref={el => { if (el) { el.style.setProperty('text-decoration', 'none', 'important') } }} href="/home" className='underline' style={{ color: 'white', textDecoration: 'none' }} onMouseOver={(e) => { e.target.style.color = "#40128B"; e.target.style.transition = "width 2s,height 2s" }} onMouseOut={(e) => { e.target.style.color = "white"; e.target.style.fontSize = '1.5rem'; }}>home</a>
             <a ref={el => { if (el) { el.style.setProperty('text-decoration', 'none', 'important') } }} href="/men" className='underline' style={{ color: 'white', textDecoration: 'none' }} onMouseOver={(e) => { e.target.style.color = "#40128B"; e.target.style.transition = "width 2s,height 2s" }} onMouseOut={(e) => { e.target.style.color = "white"; e.target.style.fontSize = '1.5rem'; }}>men</a>
             <a ref={el => { if (el) { el.style.setProperty('text-decoration', 'none', 'important') } }} href="/women" className='underline' style={{ color: 'white', textDecoration: 'none' }} onMouseOver={(e) => { e.target.style.color = "#40128B"; e.target.style.transition = "width 2s,height 2s" }} onMouseOut={(e) => { e.target.style.color = "white"; e.target.style.fontSize = '1.5rem'; }}>women</a>
-            {user.email == "ch.m.s.revanth@gmail.com" ? null :
+            {user == "ch.m.s.revanth@gmail.com" ?
+              
+              <a ref={el => { if (el) { el.style.setProperty('text-decoration', 'none', 'important') } }} href="/billing" className='underline' style={{ color: 'white', textDecoration: 'none' }} onMouseOver={(e) => { e.target.style.color = "#40128B"; e.target.style.transition = "width 2s,height 2s" }} onMouseOut={(e) => { e.target.style.color = "white"; e.target.style.fontSize = '1.5rem'; }}>bills</a>
+            
+               :
               <a ref={el => { if (el) { el.style.setProperty('text-decoration', 'none', 'important') } }} href="/cart" className='underline' style={{ color: 'white', textDecoration: 'none' }} onMouseOver={(e) => { e.target.style.color = "#40128B"; e.target.style.transition = "width 2s,height 2s" }} onMouseOut={(e) => { e.target.style.color = "white"; e.target.style.fontSize = '1.5rem'; }}>cart({cart_length})</a>
-            }
-            {
-              user.email != "ch.m.s.revanth@gmail.com" ? null :
-                <a ref={el => { if (el) { el.style.setProperty('text-decoration', 'none', 'important') } }} href="/billing" className='underline' style={{ color: 'white', textDecoration: 'none' }} onMouseOver={(e) => { e.target.style.color = "#40128B"; e.target.style.transition = "width 2s,height 2s" }} onMouseOut={(e) => { e.target.style.color = "white"; e.target.style.fontSize = '1.5rem'; }}>bills</a>
             }
           </Nav>
           <Nav>

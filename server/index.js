@@ -284,7 +284,7 @@ app.post("/get_length_of_cart", (req, res) => {
 })
 
 
-////////////////////////////////////////////////////////CART HANDLING FUNCTIONS////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////Product HANDLING FUNCTIONS////////////////////////////////////////////////////////////////
 
 
 
@@ -300,7 +300,8 @@ app.post("/get_length_of_cart", (req, res) => {
 
 
 app.post("/get_product", async (req, res) => {
-    const abc = await product_details_model.findOne({ _id: (req.body)._id });
+    let abc = await product_details_model.findOne({ _id: (req.body)._id });
+    
     res.send(abc);
 })
 
@@ -314,6 +315,13 @@ app.post("/update_product", async (req, res) => {
     res.send("yes");
 })
 
+app.post("/similar_products", async (req, res) => {
+    let abc=await cards_for_men_model.findOne({_id:(req.body).id});
+    if(abc)
+    abc=abc.products_array;
+    res.send(abc);
+})
+
 
 
 app.post("/add_review", async (req, res) => {
@@ -322,6 +330,7 @@ app.post("/add_review", async (req, res) => {
     abc.save();
     res.send("yes");
 })
+
 
 
 
